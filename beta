@@ -1,0 +1,6 @@
+ c<-read.csv("ZOTU.table",row.names=1,stringsAsFactors=FALSE)
+  vegan::vegdist(t(c),method="bray") %>% ape::pcoa()->pcoa
+  tmp<-if (is.null( pcoa$values$Rel_corr_eig))
+    pcoa$values$Relative_eig else pcoa$values$Rel_corr_eig
+  write.csv(tmp,file="Axexp.csv")
+  write.csv(pcoa$vectors,file="Ax.csv")
