@@ -1,0 +1,20 @@
+read.table("clipboard",sep="\t",header=T)->ko2module #第一列是module编号，第二列是KO、用,分隔
+read.table("clipboard",sep="\t",header=T)->koabd
+dim(ko2module)
+library(stringr)
+tmp0<- as.data.frame(matrix(numeric(0),nrow=dim(koabd)[2]-1+dim(ko2module)[2]-1))
+
+ko2module[1,dim(ko2module)[2]]
+
+for (i in 1:dim(ko2module)[1]){
+
+str_split(ko2module[i,dim(ko2module)[2]], pattern = ',', simplify = T)->tmp
+koabd[which(koabd[,1]%in%tmp),-1]->tmpabd
+as.data.frame(colSums(tmpabd))->tmpabd1
+cbind(ko2module[i,1:dim(ko2module)[2]-1],t(tmpabd1))->tmpabd2
+tmp0<-data.frame(tmp0,t(tmpabd2))
+
+}
+final<-t(tmp0)
+rbind(colnames(final),final)->final
+write.table(final,file="moduleabd.xls",sep="\t",col.names = F,row.names=F,quote=F)
